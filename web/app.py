@@ -187,7 +187,7 @@ def _play_game_logic(game, bet, extra):
         correct = (choice == "higher" and next_card > current) or (choice == "lower" and next_card < current)
         payout = bet * 1.9 if correct else 0
         return {"win": correct, "payout": payout, "multiplier": 1.9,
-                "message": f"{current} → {next_card} — {'To\'g\'ri! 1.9x' if correct else 'Noto\'g\'ri'}",
+                "message": str(current) + " → " + str(next_card) + " — " + ("Togri! 1.9x" if correct else "Notogri"),
                 "details": {"current": current, "next": next_card}}
 
     elif game == "plinko":

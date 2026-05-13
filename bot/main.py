@@ -291,12 +291,11 @@ async def investment_menu(message: types.Message):
     ).all()
     session.close()
 
-    tiers_text = "\n".join([
-        f"{'✅' if get_tier(user.invest_balance)['name'] == t['name'] else '▫️'} "
-        f"<b>{t['name']}</b>: {t['percent']}%/kun ({t['min']:,}–{'∞' if t['max'] == float('inf') else f\"{t['max']:,}\"} so'm)"
-        for t in PROFIT_TIERS
-    ])
-
+    def _tier_line(t, u_invest_balance=user.invest_balance):
+        icon = '\u2705' if get_tier(u_invest_balance)['name'] == t['name'] else '\u25ab\ufe0f'
+        max_str = '\u221e' if t['max'] == float('inf') else '{:,}'.format(int(t['max']))
+        return icon + ' <b>' + t['name'] + '</b>: ' + str(t['percent']) + '%/kun (' + '{:,}'.format(int(t['min'])) + '\u2013' + max_str + " so'm)"
+    tiers_text = '\n'.join([_tier_line(t) for t in PROFIT_TIERS])
     kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="➕ Investitsiya qo'shish", callback_data="add_invest")],
         [InlineKeyboardButton(text="📋 Faol investitsiyalar", callback_data="list_invest")],
